@@ -11,6 +11,8 @@ ActiveJob::Base.queue_adapter = :test
 ActiveJob::Base.logger = Logger.new(nil)
 ActiveSupport.test_order = :random
 
+require_relative "support/fixtures"
+
 class AJPLTestCase < ActiveSupport::TestCase
   include ActiveJob::TestHelper
   include ActiveSupport::Testing::TimeHelpers
