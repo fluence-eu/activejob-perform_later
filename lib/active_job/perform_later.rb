@@ -25,9 +25,22 @@ module ActiveJob
         target.name || raise(ArgumentError, "cannot perform_later on an anonymous class or module")
       end
 
-      def job_for(target, _method_name)
+      def job_for(target, method_name)
         klass = target.is_a?(Module) ? target : target.class
-        lookup_const(klass, "PerformLaterJob") || Job
+
+        [job_const_name(method_name), "PerformLaterJob"].each do |const_name|
+          job = lookup_const(klass, const_name)
+          return job if job
+        end
+
+        Job
+      end
+
+      def job_const_name(method_name)
+        return "PerformLaterJob" if method_name.nil?
+
+        base = ActiveSupport::Inflector.camelize(method_name.to_s.sub(/[?!=]\z/, ""))
+        "#{base}PerformLaterJob"
       end
 
       def lookup_const(mod, const_name)
