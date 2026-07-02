@@ -30,10 +30,16 @@ class DualRecord
     queue_as :class_report
   end
 
+  perform_later_job :audit, on: :instance do
+    queue_as :instance_audit
+  end
+
   def self.sync; end
   def sync; end
   def self.report; end
   def report; end
+  def self.audit; end
+  def audit; end
 end
 
 class MacroScopeTest < AJPLTestCase
@@ -61,6 +67,12 @@ class MacroScopeTest < AJPLTestCase
     record = DualRecord.new(2)
     assert_enqueued_with(job: ActiveJob::PerformLater::Job) do
       record.perform_later.report
+    end
+  end
+
+  test "class call ignores an instance-scoped job and falls back to the generic job" do
+    assert_enqueued_with(job: ActiveJob::PerformLater::Job) do
+      DualRecord.perform_later.audit
     end
   end
 
