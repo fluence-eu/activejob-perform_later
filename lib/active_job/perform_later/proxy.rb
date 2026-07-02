@@ -8,10 +8,15 @@ module ActiveJob
         @options = options
       end
 
-      def method_missing(method_name, *args, **kwargs)
+      def method_missing(method_name, *args, **kwargs, &block)
         unless @target.respond_to?(method_name)
           ::Kernel.raise ::NoMethodError,
                          "undefined method '#{method_name}' for #{@target.inspect} (via perform_later)"
+        end
+
+        if block
+          ::Kernel.raise ::ArgumentError,
+                         "cannot enqueue '#{method_name}' with a block — blocks are not serializable"
         end
 
         PerformLater.job_for(@target, method_name)

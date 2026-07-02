@@ -44,4 +44,10 @@ class GuardsTest < AJPLTestCase
       assert_raises(ArgumentError) { "TestService".perform_later.upcase }
     end
   end
+
+  test "passing a block raises ArgumentError at enqueue" do
+    assert_no_enqueued_jobs do
+      assert_raises(ArgumentError) { TestService.perform_later.build("x") { :nope } }
+    end
+  end
 end
