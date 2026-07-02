@@ -18,6 +18,10 @@ module ActiveJob
                     .set(**@options)
                     .perform_later(PerformLater.target_ref(@target), method_name.to_s, args, kwargs)
       end
+
+      def inspect
+        "#<ActiveJob::PerformLater::Proxy target=#{@target.inspect} options=#{@options.inspect}>"
+      end
     end
   end
 end

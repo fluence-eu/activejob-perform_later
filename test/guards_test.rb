@@ -32,4 +32,10 @@ class GuardsTest < AJPLTestCase
   ensure
     Object.send(:remove_const, :EphemeralService) if Object.const_defined?(:EphemeralService)
   end
+
+  test "inspecting the proxy does not enqueue a job" do
+    assert_no_enqueued_jobs do
+      assert_match(/ActiveJob::PerformLater::Proxy/, TestService.perform_later.inspect)
+    end
+  end
 end
