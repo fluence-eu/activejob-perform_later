@@ -5,17 +5,14 @@ require "test_helper"
 class DualRecord
   include GlobalID::Identification
 
-  REGISTRY = {}
-
   attr_reader :id
 
   def self.find(id)
-    REGISTRY.fetch(id.to_i)
+    new(id)
   end
 
   def initialize(id)
     @id = id
-    REGISTRY[id.to_i] = self
   end
 
   perform_later_job :sync, on: :class do
@@ -43,8 +40,6 @@ class DualRecord
 end
 
 class MacroScopeTest < AJPLTestCase
-  setup { DualRecord::REGISTRY.clear }
-
   test "scoped constants coexist without collision" do
     assert DualRecord.const_defined?(:ClassSyncPerformLaterJob, false)
     assert DualRecord.const_defined?(:InstanceSyncPerformLaterJob, false)
