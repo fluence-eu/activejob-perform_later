@@ -29,5 +29,7 @@ class GuardsTest < AJPLTestCase
     EphemeralService.perform_later.run
     Object.send(:remove_const, :EphemeralService)
     assert_raises(NameError) { perform_enqueued_jobs }
+  ensure
+    Object.send(:remove_const, :EphemeralService) if Object.const_defined?(:EphemeralService)
   end
 end
