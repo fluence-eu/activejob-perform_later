@@ -68,6 +68,15 @@ class MacroClassTest < AJPLTestCase
     end
   end
 
+  test "a top-level PerformLaterJob constant does not leak into resolution" do
+    Object.const_set(:PerformLaterJob, Class.new)
+    assert_enqueued_with(job: ActiveJob::PerformLater::Job) do
+      TestService.perform_later.build("x")
+    end
+  ensure
+    Object.send(:remove_const, :PerformLaterJob) if Object.const_defined?(:PerformLaterJob)
+  end
+
   test "redeclaring the class job raises" do
     assert_raises(ArgumentError) do
       ReportService.perform_later_job { queue_as :other }
