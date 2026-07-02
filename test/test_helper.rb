@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "cgi"
+require "cgi/escape"
 require "active_job"
 require "global_id"
 require "activejob-perform_later"
