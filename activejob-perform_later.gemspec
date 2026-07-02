@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = ">= 3.2"
 
-  spec.files         = Dir["lib/**/*.rb", "README.md"]
+  spec.files         = Dir["lib/**/*.rb", "README.md", "LICENSE"]
   spec.require_paths = ["lib"]
 
   spec.add_dependency "activejob", ">= 7.1"
