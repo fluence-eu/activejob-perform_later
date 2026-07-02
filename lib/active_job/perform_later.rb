@@ -27,8 +27,11 @@ module ActiveJob
 
       def job_for(target, method_name)
         klass = target.is_a?(Module) ? target : target.class
+        scope = target.is_a?(Module) ? :class : :instance
 
-        [job_const_name(method_name), "PerformLaterJob"].each do |const_name|
+        [job_const_name(method_name, on: scope),
+         job_const_name(method_name),
+         "PerformLaterJob"].each do |const_name|
           job = lookup_const(klass, const_name)
           return job if job
         end
@@ -36,11 +39,12 @@ module ActiveJob
         Job
       end
 
-      def job_const_name(method_name)
+      def job_const_name(method_name, on: nil)
         return "PerformLaterJob" if method_name.nil?
 
+        prefix = on ? ActiveSupport::Inflector.camelize(on.to_s) : ""
         base = ActiveSupport::Inflector.camelize(method_name.to_s.sub(/[?!=]\z/, ""))
-        "#{base}PerformLaterJob"
+        "#{prefix}#{base}PerformLaterJob"
       end
 
       def lookup_const(mod, const_name)

@@ -3,8 +3,15 @@
 module ActiveJob
   module PerformLater
     module Macro
-      def perform_later_job(method_name = nil, &block)
-        const_name = PerformLater.job_const_name(method_name)
+      VALID_SCOPES = [nil, :class, :instance].freeze
+
+      def perform_later_job(method_name = nil, on: nil, &block)
+        unless VALID_SCOPES.include?(on)
+          raise ArgumentError, "on: must be :class or :instance, got #{on.inspect}"
+        end
+        raise ArgumentError, "on: requires a method name" if on && method_name.nil?
+
+        const_name = PerformLater.job_const_name(method_name, on: on)
         if const_defined?(const_name, false)
           raise ArgumentError, "#{self}::#{const_name} is already defined"
         end
