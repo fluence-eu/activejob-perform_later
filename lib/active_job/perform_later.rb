@@ -9,8 +9,14 @@ require "active_job/perform_later/macro"
 module ActiveJob
   module PerformLater
     class << self
+      attr_writer :base_job
+
+      def base_job
+        @base_job ||= "ActiveJob::Base"
+      end
+
       def resolved_base_job
-        ActiveJob::Base
+        base_job.is_a?(String) ? Object.const_get(base_job) : base_job
       end
 
       def target_ref(target)
