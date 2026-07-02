@@ -8,9 +8,11 @@ module ActiveJob
         target.public_send(method_name, *args, **kwargs)
       end
     end
+  end
+end
 
-    class Job < ActiveJob::Base
-      include JobBehavior
-    end
+ActiveSupport.on_load(:active_job) do
+  class ActiveJob::PerformLater::Job < ActiveJob::Base
+    include ActiveJob::PerformLater::JobBehavior
   end
 end
