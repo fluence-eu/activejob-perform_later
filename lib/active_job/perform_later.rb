@@ -20,6 +20,9 @@ module ActiveJob
       end
 
       def target_ref(target)
+        if target.is_a?(String)
+          raise ArgumentError, "String targets are not supported by perform_later"
+        end
         return target unless target.is_a?(Module)
 
         target.name || raise(ArgumentError, "cannot perform_later on an anonymous class or module")

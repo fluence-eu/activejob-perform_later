@@ -38,4 +38,10 @@ class GuardsTest < AJPLTestCase
       assert_match(/ActiveJob::PerformLater::Proxy/, TestService.perform_later.inspect)
     end
   end
+
+  test "string targets raise ArgumentError at enqueue" do
+    assert_no_enqueued_jobs do
+      assert_raises(ArgumentError) { "TestService".perform_later.upcase }
+    end
+  end
 end
