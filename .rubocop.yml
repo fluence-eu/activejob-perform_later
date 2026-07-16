@@ -1,0 +1,66 @@
+AllCops:
+  TargetRubyVersion: 3.2
+  NewCops: enable
+
+# The codebase predates the shared single-quote convention — keep its
+# existing double-quote style rather than rewrite every file.
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: double_quotes
+
+Naming/FileName:
+  Exclude:
+    - lib/activejob-perform_later.rb
+
+# Guard clauses that raise keep their multi-line if/end form for
+# readability — modifier form buries the raise at the end of the line.
+Style/IfUnlessModifier:
+  Enabled: false
+
+# The generic Job is intentionally defined inside the :active_job load
+# hook so requiring the gem never forces Active Job to load early; the
+# compact in-block definition is the point of that design.
+Lint/ConstantDefinitionInBlock:
+  Exclude:
+    - lib/active_job/perform_later/job.rb
+
+Style/ClassAndModuleChildren:
+  Exclude:
+    - lib/active_job/perform_later/job.rb
+
+# The proxy is a BasicObject that forwards every call to a job — it
+# deliberately exposes no respond_to? surface of its own.
+Style/MissingRespondToMissing:
+  Exclude:
+    - lib/active_job/perform_later/proxy.rb
+
+# perform_later_job concentrates the macro's argument validation and
+# job-class generation in one deliberate, linear method.
+Metrics/AbcSize:
+  Max: 18
+
+Metrics/CyclomaticComplexity:
+  Max: 8
+
+Metrics/MethodLength:
+  Max: 18
+
+Metrics/PerceivedComplexity:
+  Max: 9
+
+Metrics:
+  Exclude:
+    - test/**/*
+
+# Test fixtures accumulate performed calls into RESULTS/REGISTRY
+# constants — they are mutable on purpose.
+Style/MutableConstant:
+  Exclude:
+    - test/**/*
+
+# Compact `private def` fixture stubs.
+Style/AccessModifierDeclarations:
+  Exclude:
+    - test/support/fixtures.rb
