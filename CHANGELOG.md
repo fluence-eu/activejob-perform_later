@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
+### Build
+
+- build: add fluence-ci-tools tooling and gem metadata
+
+### CI
+
+- ci: wire fluence-eu/ci-workflows@v6 gates and release flow
+
+### Documentation
+
+- docs: add changelog and contributing guide
+- docs: document the public API and wire the yardstick gate
+
+### Style
+
+- style: add rubocop config aligned with the existing code style
+
+### Tests
+
+- test: enforce coverage thresholds with SimpleCov and Undercover
+
+## [0.1.0] - 2026-07-02
+
 ### Added
 
 - Add MIT license
