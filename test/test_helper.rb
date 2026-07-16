@@ -1,5 +1,20 @@
 # frozen_string_literal: true
 
+require "simplecov"
+require "undercover/simplecov_formatter"
+
+SimpleCov.start do
+  add_filter "/test/"
+  minimum_coverage 95
+  minimum_coverage_by_file 70
+  formatter SimpleCov::Formatter::MultiFormatter.new(
+    [
+      SimpleCov::Formatter::HTMLFormatter,
+      SimpleCov::Formatter::Undercover
+    ]
+  )
+end
+
 require "cgi/escape"
 require "active_job"
 require "global_id"
