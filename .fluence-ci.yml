@@ -1,0 +1,6 @@
+# Per-project options for the fluence-eu/ci-workflows@v6 reusables.
+# Full key schema: https://github.com/fluence-eu/ci-workflows#per-project-configuration-fluence-ciyml
+ruby_version: '3.2'
+
+release:
+  gem_specs: activejob-perform_later

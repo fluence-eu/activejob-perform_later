@@ -1,3 +1,6 @@
 /.bundle/
+/.yardoc
+/coverage/
+/doc/
 /pkg/
 Gemfile.lock
